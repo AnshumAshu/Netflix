@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { getAIRecommendation } from "../lib/AIModel";
-import RecommendedMovies from "../components/RecommendedMovies";
-
+import RecommendedMovies from "../components/RecommendedMovies1";
 
 const steps = [
   {

@@ -74,3 +74,5 @@ const RecommendedMovies = ({movieTitles}) => {
 };
 
 export default RecommendedMovies
+
+

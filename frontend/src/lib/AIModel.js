@@ -1,23 +1,22 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenerativeAI({
-  apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY, // ✅ must be object
+const ai = new GoogleGenAI({
+  apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY,
 });
-
 const config = {
   responseMimeType: "text/plain",
 };
-
-const model = ai.getGenerativeModel({ model: "gemini-1.5-flash-latest" }); // ✅ use latest
+const model = "gemini-2.0-flash";
 
 export async function getAIRecommendation(prompt) {
   try {
-    const response = await model.generateContent({
+    const response = await ai.models.generateContent({
+      model,
+      config,
       contents: [{ role: "user", parts: [{ text: prompt }] }],
-      generationConfig: config,
     });
 
-    return response.response.text(); // ✅ correct way to get text
+    return response?.candidates?.[0]?.content?.parts?.[0]?.text;
   } catch (error) {
     console.error("Error sending message: ", error);
     return null;

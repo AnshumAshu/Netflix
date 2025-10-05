@@ -5,9 +5,9 @@ import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import { Bookmark, Play } from "lucide-react";
 
-const TrendingMovies = () => {
-  const [movies, setMovies] = useState([]);
-  const [heroMovie, setHeroMovie] = useState(null);
+const TrendingMovies2 = () => {
+  const [trending, setTrending] = useState([]);
+  const [treandingmovies, settreandingmovies] = useState(null);
 
   const options = {
     method: 'GET',
@@ -21,10 +21,10 @@ const TrendingMovies = () => {
     fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US', options)
       .then(res => res.json())
       .then(res => {
-        if (res.results) {
-          setMovies(res.results);
+        setTrending(res.results);
+        if (res.results.length > 0) {
           const randomIndex = Math.floor(Math.random() * res.results.length);
-          setHeroMovie(res.results[randomIndex]);
+          settreandingmovies(res.results[randomIndex]);
         }
       })
       .catch(err => console.error(err));
@@ -33,18 +33,18 @@ const TrendingMovies = () => {
   return (
     <div className="text-white md:px-4">
       {/* Hero Section */}
-      {heroMovie && (
+      {treandingmovies && (
         <div className="relative mb-10 mt-5">
           <img
-            src={`https://image.tmdb.org/t/p/original/${heroMovie.backdrop_path}`}
-            alt={heroMovie.title || "Hero Movie"}
+            src={`https://image.tmdb.org/t/p/original/${treandingmovies.backdrop_path}`}
+            alt={treandingmovies.title || "Hero Movie"}
             className="w-full h-[480px] object-cover rounded-2xl"
           />
           <div className="flex space-x-2 md:space-x-4 absolute bottom-3 left-4 md:bottom-8 md:left-10">
             <button className="flex justify-center items-center bg-white hover:bg-gray-200 text-[#e50914] py-3 px-4 rounded-full cursor-pointer text-sm md:text-base">
               <Bookmark className="mr-2 w-4 h-5 md:w-5 md:h-5" /> Save for Later
             </button>
-            <Link to={`/movie/${heroMovie.id}`}>
+            <Link to={`/movie/${treandingmovies.id}`}>
               <button className="flex justify-center items-center bg-[#e50914] text-white py-3 px-4 rounded-full cursor-pointer text-sm md:text-base">
                 <Play className="mr-2 w-4 h-5 md:w-5 md:h-5" /> Watch Now
               </button>
@@ -56,7 +56,7 @@ const TrendingMovies = () => {
       {/* Trending Movies Swiper */}
       <h2 className="pt-10 pb-5 text-lg font-medium">Trending Movies</h2>
       <Swiper slidesPerView={"auto"} spaceBetween={10} className="mySwiper">
-        {movies.map((movie) => (
+        {trending.map((movie) => (
           <SwiperSlide
             key={movie.id}
             className="max-w-72 flex flex-col items-center"
@@ -74,9 +74,10 @@ const TrendingMovies = () => {
           </SwiperSlide>
         ))}
       </Swiper>
+
       <Footer />
     </div>
   );
 };
 
-export default TrendingMovies;
+export default TrendingMovies2;
