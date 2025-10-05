@@ -2,7 +2,7 @@ import {create} from 'zustand';
 import axios from 'axios';
 axios.defaults.withCredentials = true;
 import Signup from '../pages/Signup';
-const API_URL = "http://localhost:5000/api";
+const API_URL = "https://netflix-j2hg.onrender.com";
 
 const useAuthStore = create((set) => ({
     // initial states
