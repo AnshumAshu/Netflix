@@ -3,23 +3,24 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Link } from "react-router-dom";
-import {useNavigate} from "react-router-dom";
+//import {useNavigate} from "react-router-dom";
 
 const CardList = ({ title, category }) => {
   const [movies, setMovies] = useState([]);
- const navigate = useNavigate();
+ //const navigate = useNavigate();
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const token = import.meta.env.VITE_TMDB_TOKEN;
+        //const token = import.meta.env.VITE_TMDB_TOKEN;
 
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=1`,
           {
             headers: {
               accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
+              Authorization:
+				"Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ODUyMmZlZWNmYjVhODAwNTdlNTQ4NTc2ZjlhYmQ4YyIsIm5iZiI6MTc1OTI0MTIwNy45MTIsInN1YiI6IjY4ZGJlM2Y3MTU1ZDA5ZmNkZDJkZjI1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kXp8UsCn_UwPCdW7BYWUedrjYZ_SmO-RESJ_vnCu44U",
+		},
           }
         );
 
