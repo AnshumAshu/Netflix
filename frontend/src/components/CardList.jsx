@@ -1,82 +1,71 @@
+
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Link } from "react-router-dom";
-import Footer from "../components/Footer";
-import { Bookmark, Play } from "lucide-react";
 
-const TrendingMovies = () => {
+const CardList = ({ title, category }) => {
   const [movies, setMovies] = useState([]);
-  const [heroMovie, setHeroMovie] = useState(null);
-
-  const options = {
-    method: 'GET',
-    headers: {
-      accept: 'application/json',
-      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4ODUyMmZlZWNmYjVhODAwNTdlNTQ4NTc2ZjlhYmQ4YyIsIm5iZiI6MTc1OTI0MTIwNy45MTIsInN1YiI6IjY4ZGJlM2Y3MTU1ZDA5ZmNkZDJkZjI1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.kXp8UsCn_UwPCdW7BYWUedrjYZ_SmO-RESJ_vnCu44U'
-    }
-  };
 
   useEffect(() => {
-    fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US', options)
-      .then(res => res.json())
-      .then(res => {
-        if (res.results) {
-          setMovies(res.results);
-          const randomIndex = Math.floor(Math.random() * res.results.length);
-          setHeroMovie(res.results[randomIndex]);
+    const fetchMovies = async () => {
+      try {
+        const token = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=1`,
+          {
+            headers: {
+              accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`TMDB error: ${response.status}`);
         }
-      })
-      .catch(err => console.error(err));
-  }, []);
+
+        const data = await response.json();
+        setMovies(data.results || []);
+      } catch (error) {
+        console.error(`Error fetching ${title}:`, error);
+      }
+    };
+
+    fetchMovies();
+  }, [title, category]);
 
   return (
-    <div className="text-white md:px-4">
-      {/* Hero Section */}
-      {heroMovie && (
-        <div className="relative mb-10 mt-5">
-          <img
-            src={`https://image.tmdb.org/t/p/original/${heroMovie.backdrop_path}`}
-            alt={heroMovie.title || "Hero Movie"}
-            className="w-full h-[480px] object-cover rounded-2xl"
-          />
-          <div className="flex space-x-2 md:space-x-4 absolute bottom-3 left-4 md:bottom-8 md:left-10">
-            <button className="flex justify-center items-center bg-white hover:bg-gray-200 text-[#e50914] py-3 px-4 rounded-full cursor-pointer text-sm md:text-base">
-              <Bookmark className="mr-2 w-4 h-5 md:w-5 md:h-5" /> Save for Later
-            </button>
-            <Link to={`/movie/${heroMovie.id}`}>
-              <button className="flex justify-center items-center bg-[#e50914] text-white py-3 px-4 rounded-full cursor-pointer text-sm md:text-base">
-                <Play className="mr-2 w-4 h-5 md:w-5 md:h-5" /> Watch Now
-              </button>
-            </Link>
-          </div>
-        </div>
-      )}
+    <section className="my-8 text-white">
+      <h2 className="mb-4 text-xl font-semibold">{title}</h2>
 
-      {/* Trending Movies Swiper */}
-      <h2 className="pt-10 pb-5 text-lg font-medium">Trending Movies</h2>
-      <Swiper slidesPerView={"auto"} spaceBetween={10} className="mySwiper">
+      <Swiper slidesPerView="auto" spaceBetween={12}>
         {movies.map((movie) => (
           <SwiperSlide
             key={movie.id}
-            className="max-w-72 flex flex-col items-center"
+            className="!w-36 sm:!w-44 md:!w-52"
           >
             <Link to={`/movie/${movie.id}`}>
               <img
-                src={`https://image.tmdb.org/t/p/w500/${movie.backdrop_path}`}
+                src={
+                  movie.poster_path
+                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                    : "/cardimg.jpg"
+                }
                 alt={movie.title || "Movie poster"}
-                className="h-44 w-full object-cover rounded-lg"
+                className="h-52 w-full rounded-lg object-cover sm:h-64"
               />
-              <p className="text-center pt-2 text-sm">
+
+              <p className="mt-2 text-sm">
                 {movie.title || "Untitled"}
               </p>
             </Link>
           </SwiperSlide>
         ))}
       </Swiper>
-      <Footer />
-    </div>
+    </section>
   );
 };
 
-export default TrendingMovies;
+export default CardList;

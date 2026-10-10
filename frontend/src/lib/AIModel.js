@@ -6,7 +6,7 @@ const ai = new GoogleGenAI({
 const config = {
   responseMimeType: "text/plain",
 };
-const model = "gemini-2.0-flash";
+const model = "gemini-3.8-flash";
 
 export async function getAIRecommendation(prompt) {
   try {
