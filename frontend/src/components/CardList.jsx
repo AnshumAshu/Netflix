@@ -3,14 +3,15 @@ import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Link } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
 const CardList = ({ title, category }) => {
   const [movies, setMovies] = useState([]);
-
+ const navigate = useNavigate();
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const token = import.meta.env.VITE_TMDB_READ_ACCESS_TOKEN;
+        const token = import.meta.env.VITE_TMDB_TOKEN;
 
         const response = await fetch(
           `https://api.themoviedb.org/3/movie/${category}?language=en-US&page=1`,
