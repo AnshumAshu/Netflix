@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { getAIRecommendation } from "../lib/AIModel";
 import RecommendedMovies from "../components/RecommendedMovies1";
-
+import {useNavigate} from "react-router-dom";
 const steps = [
   {
     name: "genre",
@@ -57,6 +57,8 @@ const AIRecommendations = () => {
   const [recommendation, setRecommendation] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleOption = (value) => {
     setInputs({ ...inputs, [steps[step].name]: value });
     console.log(inputs);
@@ -73,6 +75,9 @@ const AIRecommendations = () => {
   const handleBack = () => {
     if (step > 0) {
       setStep(step - 1);
+    }
+    else{
+      navigate("/");
     }
   };
 
@@ -191,7 +196,7 @@ Recommend 10 ${inputs.mood.toLowerCase()} ${
               <button
                 type="button"
                 onClick={handleBack}
-                disabled={step == 0}
+                //disabled={step == 0}
                 className="px-6 py-2 rounded-lg font-semibold transition border-2 border-[#444] text-white bg-[#181818] hover:bg-[#232323]"
               >
                 Back
@@ -206,7 +211,9 @@ Recommend 10 ${inputs.mood.toLowerCase()} ${
                 disabled={!inputs[steps[step].name] || isLoading}
                 className="px-6 py-2 rounded-lg font-semibold transition border-2 border-[#e50914] text-white bg-[#e50914] hover:bg-[#b0060f] ml-2"
               >
-                {step === steps.length - 1 ? "Finish" : "Next"}
+                {isLoading
+                ? "Finding movies..."
+                :step === steps.length - 1 ? "Finish" : "Next"}
               </button>
             </div>
           </div>
