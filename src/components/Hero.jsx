@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 //import herobg from "../assets/herobg.jpg";
 import { Bookmark } from "lucide-react";
 import { Play } from "lucide-react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
 	const [MoveIcon,setmovie]=useState(null);
